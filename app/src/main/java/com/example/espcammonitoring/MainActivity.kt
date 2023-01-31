@@ -53,8 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         val buttonPhoto: Button = findViewById(R.id.take_photo)
         buttonPhoto.setOnClickListener {
-            // pass layout view to method to perform capture screenshot and save it.
-            takeScreenshot(window.decorView.rootView)
+            takeScreenshot(webView)
         }
     }
 
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         val formattedDate = dateFormat.format(date)
 
         try {
-            // File name : keeping file name unique using data time.
             val path = Environment.getExternalStorageDirectory().toString() + File.separator + "espCam" + "/${formattedDate}.jpg"
             view.isDrawingCacheEnabled = true
             val bitmap = Bitmap.createBitmap(view.drawingCache)
