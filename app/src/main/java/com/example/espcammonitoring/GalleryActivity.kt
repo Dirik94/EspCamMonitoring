@@ -28,7 +28,7 @@ class GalleryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
         recyclerView = findViewById(R.id.image_recycler)
-        recyclerView?.setLayoutManager(LinearLayoutManager(this@GalleryActivity))
+        recyclerView?.layoutManager = LinearLayoutManager(this@GalleryActivity)
         recyclerView?.setHasFixedSize(true)
         if (ActivityCompat.checkSelfPermission(
                 this@GalleryActivity,

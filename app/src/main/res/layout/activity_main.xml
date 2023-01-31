@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E8891D"
+    android:backgroundTintMode="multiply"
     tools:context=".MainActivity">
 
     <!-- Place Web-view on the Screen -->
