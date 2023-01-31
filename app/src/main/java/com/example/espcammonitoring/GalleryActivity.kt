@@ -42,35 +42,56 @@ class GalleryActivity : AppCompatActivity() {
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             activityResultLauncher.launch(READ_EXTERNAL_STORAGE)
-        } else {
+        }
+        if(ActivityCompat.checkSelfPermission(
+                this@GalleryActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this@GalleryActivity,
+                READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED){
             images
         }
     }
 
     override fun onResume() {
         super.onResume()
-        images
+        if(ActivityCompat.checkSelfPermission(
+                this@GalleryActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                this@GalleryActivity,
+                READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED){
+            images
+        }
     }
     private val images: Unit
         get() {
             arrayList.clear()
-            val file = File(Environment.getExternalStorageDirectory(),"espCam")
-            val files = file.listFiles()
-            if (files != null) {
-                for (file1 in files) {
-                    if (file1.path.endsWith(".png") || file1.path.endsWith(".jpg")) {
-                        arrayList.add(Image(file1.name, file1.path, file1.length()))
+            val path: String =
+                Environment.getExternalStorageDirectory().toString() + "/Documents/espCam"
+            val file = File(path)
+            if (file.exists()) {
+                val files = file.listFiles()
+                if (files != null) {
+                    for (file1 in files) {
+                        if (file1.path.endsWith(".png") || file1.path.endsWith(".jpg")) {
+                            arrayList.add(Image(file1.name, file1.path, file1.length()))
+                        }
                     }
                 }
-            }
-            val adapter = ImageAdapter(this@GalleryActivity, arrayList)
-            recyclerView!!.adapter = adapter
-            adapter.setOnItemClickListener { view, path ->
-                startActivity(
-                    Intent(
-                        this@GalleryActivity, ImageViewerActivity::class.java
-                    ).putExtra("image", path)
-                )
+                val adapter = ImageAdapter(this@GalleryActivity, arrayList)
+                recyclerView!!.adapter = adapter
+                adapter.setOnItemClickListener { view, path ->
+                    startActivity(
+                        Intent(
+                            this@GalleryActivity, ImageViewerActivity::class.java
+                        ).putExtra("image", path)
+                    )
+                }
             }
         }
 }

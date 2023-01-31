@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
             startActivity(intent)
+            val path: String = Environment.getExternalStorageDirectory().toString() + "/Documents/espCam"
+            val folder = File(path)
+            if (!folder.exists()) {
+                folder.mkdirs()
+            }
         }
 
         val buttonGallery: Button = findViewById(R.id.gallery)
@@ -64,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         val formattedDate = dateFormat.format(date)
 
         try {
-            val path = Environment.getExternalStorageDirectory().toString() + File.separator + "espCam" + "/${formattedDate}.jpg"
+            val path = Environment.getExternalStorageDirectory().toString() + "/Documents/espCam" + "/${formattedDate}.jpg"
             view.isDrawingCacheEnabled = true
             val bitmap = Bitmap.createBitmap(view.drawingCache)
             view.isDrawingCacheEnabled = false
