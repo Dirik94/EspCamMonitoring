@@ -1,25 +1,25 @@
 package com.example.espcammonitoring
 
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.http.SslError
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.webkit.SslErrorHandler
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import java.io.*
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -27,18 +27,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // WebViewClient allows you to handle
-        // onPageFinished and override Url loading.
-        val myWebView: WebView = findViewById(R.id.webView)
+        var webView = findViewById<WebView>(R.id.webView)
+        webView.webViewClient = WebViewClientMy()
 
         // this will load the url of the website
-        myWebView.loadUrl("http://192.168.1.5:81/stream")
+        webView.loadUrl("http://192.168.1.5:81/stream")
 
         // this will enable the javascript settings, it can also allow xss vulnerabilities
-        myWebView.settings.javaScriptEnabled = true
+        webView.settings.javaScriptEnabled = true
 
         // if you want to enable zoom feature
-        myWebView.settings.setSupportZoom(true)
+        webView.settings.setSupportZoom(true)
 
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
@@ -85,5 +84,12 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
         return null
+    }
+}
+
+class WebViewClientMy : WebViewClient() {
+    @Override
+    override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError?) {
+        handler.proceed() // Ignore SSL certificate errors
     }
 }
